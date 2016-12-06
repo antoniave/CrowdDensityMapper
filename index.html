@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Crowd Density Mapper</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" /> <!---Leaflet CSS */ -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+
+<body onload="getLocation()">
+
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="iconbar"></span>
+				</button>
+				<!--<a class="navbar-brand" href="index.html"Home</a>-->
+			</div>
+
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li><a href="about.html">Getting started</a></li>
+					<li class="active"><a href="index.html">Application<span class="sr-only"></span></a></li>
+				</ul>
+				<p class="navbar-brand navbar-center"><u><strong>Crowd Density Mapper</strong></u></p>
+			</div>
+		</div>
+	</nav>
+
+
+
+
+	<h1> Crowd Density Mapper</h1>
+	<button type="button" onclick="location.reload()">Refresh</button>
+	<div id="instruction">Location must be provided to view Crowd Density</div>
+	<div id="mapid"  style="height:600px";></div>
+	<br>
+	<b>Longitude/Latitude (For testing purposes): </b>
+	<p id="test"></p>
+
+<script src="jsnlog.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.3.js"></script>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src = "js/map.js"> </script> <!--Main Script -->
+<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script> <!---Leaflet Javascript Library */ -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> <!--JQUERY & Ajax -->
+
+
+</body>
+</html>
