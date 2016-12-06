@@ -74,7 +74,6 @@ satellitestreets = L.tileLayer(mbUrl, {id: 'mapbox.streets-satellite', attributi
 function sendPosition(position) {
 	console.log("sending position to server"); // todo
     x.innerHTML ="Below you can see the density map, based on your current location:";	
-    test.innerHTML = "Latitude: " + position.coords.latitude +"<br>Longitude: " + position.coords.longitude; /*Show coordinates on page - to be deleted */
 	var d = new Date(position.timestamp); /*Get Time Stamp */
 	var geojsonFeature = { /*Create GeoJSON Feature */
 		"type": "Feature",
