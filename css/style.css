@@ -29,6 +29,25 @@ body,html {
 	color: #646464;
 	background-color: #9ea0b1;
 }
+.navbar-default .navbar-toggle {
+	border-color: #9ea0b1;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+	background-color: #9ea0b1;
+}
+.navbar-default .navbar-toggle .icon-bar {
+	background-color: #595959;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+	border-color: #595959;
+}
+.navbar-default .navbar-link {
+	color: #595959;
+}
+.navbar-default .navbar-link:hover {
+	color: #646464;
+}
 
 .navbar-center
 {
