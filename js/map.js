@@ -20,7 +20,7 @@ function sendContinuously(){
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(sendPositionAuto, showError);
         // todo: prevent asking for permissions each time
-        setTimeout(sendContinuously, 10000);
+        setTimeout(sendContinuously, 60000);
     } else {
         x.innerHTML = "Geolocation is not supported by this browser or device";
     }
