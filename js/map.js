@@ -14,7 +14,7 @@ function getLocation() { /*GetLocation HTML5 */
 }
 
 /**
- * Receive and send position every 10 seconds automatically
+ * Receive and send position every 60 seconds automatically
  */
 function sendContinuously(){
     if (navigator.geolocation) {
@@ -102,7 +102,6 @@ function initialize(position) {
     var geojsonFeature = createGeoJSON(position);
 
 	console.log(JSON.stringify(geojsonFeature)); /*TEST - Print JSON as string */
-	console.log(geojsonFeature);
 	// todo call sendPositionToServerr before createMap
 	createMap(position);
 	sendPositionToServer(geojsonFeature);
