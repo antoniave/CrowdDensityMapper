@@ -106,7 +106,7 @@ function initialize(position) {
 	createMap(position);
 	sendPositionToServer(geojsonFeature);
 
-	/** sendContinuously();*/
+	sendContinuously();
 }
 
 
