@@ -74,4 +74,15 @@ body,html {
     background-color: #e5e5e5; 
 }
 
-/**@media (min-width: @screen-sm-min) { ... }*/
+@media (min-width: @screen-sm-min) { 
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+		color: #595959;
+	}
+	.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+		color: #646464;
+	}
+	.navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+		color: #646464;
+		background-color: #9ea0b1;
+	}
+}
