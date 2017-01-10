@@ -10,7 +10,9 @@ body,html {
     background-color: #c4c8d5;
     border-color: #9ea0b1;
 }
-
+.navbar-default .navbar-header .navbar-center{
+	color: #646464;
+}
 .navbar-default .navbar-text {
 	color: #191919;
 }
@@ -49,6 +51,7 @@ body,html {
    text-align: center;
    margin: auto;
    font-size: 23px;
+   color: #fff;
 }
 
 /*customization of the button*/
