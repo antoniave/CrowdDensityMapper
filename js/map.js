@@ -1,5 +1,4 @@
 var x = document.getElementById("instruction");
-var test = document.getElementById("test");
 
 /**
  * Receive and send position once
@@ -202,4 +201,31 @@ function sendPositionToServer(geojsonFeature){
         }
     });
 }
+
+
+$(document).ready(function() {
+    $("#slider").slider();
+    $(".selector").slider({
+        disabled: false
+    });
+    console.log("test");
+});
+// Getter
+//var disabled = $( ".selector" ).slider( "option", "disabled" );
+// Setter
+//$( ".selector" ).slider( "option", "disabled", true );
+
+
+//========= timestemp =========
+// todo show timestep with the date and time of the last reload of the wms request
+
+//========= timeslider =========
+// todo: add timesilder to the map
+// todo: get the first and the last timepoint (newest: new?)
+// todo: get request to db to receive the link for the requested timestep (or all at once?)
+    // I'll receive a json containing a timestemp and a link to an image (png), sorted
+// todo: show the image (belonging to the link) on the map (and remove the old one)
+// todo: do not automatically reload the wms while timeslider is used
+
+
 
