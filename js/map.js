@@ -1,3 +1,5 @@
+
+
 var x = document.getElementById("instruction");
 
 /**
@@ -25,25 +27,34 @@ function sendContinuously(){
     }
 }
 
+function Redirect() {
+    window.location="about.html";
+}
+
+
 /**
  * Called if an error occurs by recieving users location
  * (getLocation(), sendContinuously())
  * @param error
  */
 function showError(error) {  /*Error List IN CASE getLocation has failed */
-    switch(error.code) {
+        switch(error.code) {
         case error.PERMISSION_DENIED:
+            Redirect();
             x.innerHTML = "User denied the request for Geolocation.";
             x.style.backgroundColor="red";
-            createDefaultmap();
+            /**createDefaultmap();*/
             break;
         case error.POSITION_UNAVAILABLE:
+            Redirect();
             x.innerHTML = "Location information is unavailable.";
             break;
         case error.TIMEOUT:
+            Redirect();
             x.innerHTML = "The request to get user location timed out.";
             break;
         case error.UNKNOWN_ERROR:
+            Redirect();
             x.innerHTML = "An unknown error occurred.";
             break;
     }
@@ -194,7 +205,7 @@ function sendPositionToServer(geojsonFeature){
         data: geojsonFeature,
         // todo
         success: function (data, textStatus){
-            alert ("Your location has been submitted to server!" + textStatus);
+            //alert ("Your location has been submitted to server!" + textStatus);
         },
         error: function (xhr, textStatus, error){
             alert ("An error has occured: " + error);
