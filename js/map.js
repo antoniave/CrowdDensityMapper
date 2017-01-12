@@ -213,30 +213,47 @@ function sendPositionToServer(geojsonFeature){
     });
 }
 
+//===== timelider ======
+// show one image for every 10 min in the last two hour
 
 $(document).ready(function() {
-    $("#slider").slider();
-    $(".selector").slider({
-        disabled: false
+    // todo: get request to db to receive the link for the requested timestep (or all at once?)
+        // We'll receive a json containing a timestemp and a link to an image (png), sorted
+
+    // todo read out timestamp and convert it to unix seconds and add the correct value as max in the slider
+    //for testing: take the current time as max
+    var secs = new Date().getTime() + 3600*2;
+    var max = secs; // time of the latest
+    var min = ((secs/1000 - 60*60*2))*1000; //2 hours in the past
+
+    // Show latest date as text next to timeslider
+    var latestDate = new Date (1970, 0, 1);
+    latestDate.setSeconds(max/1000);
+    $("#dateField").text(latestDate.toISOString().split('T')[0] + " " + latestDate.toISOString().split('T')[1].split('.')[0]);
+
+    $("#slider").slider({
+        min: min,
+        max: max,
+        step: 600*1000,     // 10 min steps
+        value: max,         // position of the handler at the beginning
+        disabled: false,
+
+        change: function( event, ui ) {
+            var seconds = ui.value+"";
+            var date = new Date(1970, 0, 1);
+            date.setSeconds(seconds/1000);
+            $("#dateField").text(date.toISOString().split('T')[0] + " " + date.toISOString().split('T')[1].split('.')[0]);
+
+            // todo show the image (belonging to the link) on the map (and remove the old one)
+            // todo: do not automatically reload the wms while timeslider is used: maybe enable timeslider manually?
+        }
     });
-    console.log("test");
 });
-// Getter
-//var disabled = $( ".selector" ).slider( "option", "disabled" );
-// Setter
-//$( ".selector" ).slider( "option", "disabled", true );
 
 
-//========= timestemp =========
-// todo show timestep with the date and time of the last reload of the wms request
+//========= timestamp =========
+// todo show timestamp with the date and time of the last reload of the wms request
 
-//========= timeslider =========
-// todo: add timesilder to the map
-// todo: get the first and the last timepoint (newest: new?)
-// todo: get request to db to receive the link for the requested timestep (or all at once?)
-    // I'll receive a json containing a timestemp and a link to an image (png), sorted
-// todo: show the image (belonging to the link) on the map (and remove the old one)
-// todo: do not automatically reload the wms while timeslider is used
 
 
 
