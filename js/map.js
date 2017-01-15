@@ -190,7 +190,7 @@ function createMap(position){
         "Density": wmsLayer
     };
 
-    L.control.layers(baseLayers, overlays).addTo(map); /*After creating WMS, should be: baseLayers,density */
+    ctrl = L.control.layers(baseLayers, overlays).addTo(map); /*After creating WMS, should be: baseLayers,density */
 }
 
 
