@@ -184,7 +184,7 @@ function createMap(position){
         "Light Map": light
     };
 
-    var wmsLayer = L.tileLayer.wms('http://demo.opengeo.org/geoserver/ows?', {layers: 'nasa:bluemarble'}); /*WMS Layer to be received from WPS Team */
+    wmsLayer = L.tileLayer.wms('http://demo.opengeo.org/geoserver/ows?', {layers: 'nasa:bluemarble'}); /*WMS Layer to be received from WPS Team */
 
     var overlays = {
         "Density": wmsLayer
