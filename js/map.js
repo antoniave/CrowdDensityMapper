@@ -191,6 +191,18 @@ function createMap(position){
     };
 
     ctrl = L.control.layers(baseLayers, overlays).addTo(map); /*After creating WMS, should be: baseLayers,density */
+    getWMS();
+}
+
+/**
+ * getWMS and add it to legend every 90 seconds from server
+ */
+function getWMS(){
+    ctrl.removeLayer(wmsLayer);
+    wmsLayer = L.tileLayer.wms('http://demo.opengeo.org/geoserver/ows?', {layers: 'nasa:bluemarble'});
+    ctrl.addOverlay(wmsLayer, 'NASA');
+    console.log("WMS Added");
+    setTimeout(getWMS, 90000); //every 90 seconds
 }
 
 
@@ -208,7 +220,7 @@ function sendPositionToServer(geojsonFeature){
             //alert ("Your location has been submitted to server!" + textStatus);
         },
         error: function (xhr, textStatus, error){
-            alert ("An error has occured: " + error);
+            alert ("An error has occured sending position to server: " + error);
         }
     });
 }
