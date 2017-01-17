@@ -185,26 +185,39 @@ function createMap(position){
         "Light Map": light
     };
 
-    wmsLayer = L.tileLayer.wms('http://demo.opengeo.org/geoserver/ows?', {layers: 'nasa:bluemarble'}); /*WMS Layer to be received from WPS Team */
+    //Load image from WMS
+    //wmsLayer = L.tileLayer.wms('http://demo.opengeo.org/geoserver/ows?', {layers: 'nasa:bluemarble'}); /*WMS Layer to be received from WPS Team */
+
+    // Load image as layer from URL
+    //var imageUrl = 'http://www.getpaint.net/doc/latest/images/layerswindow/appletransparentbg.png';
+    //var image = L.imageOverlay(imageUrl, imageBounds).addTo(map);
+    
+    // Load image as layer LOCALLY
+    var imageBounds = [[51.404102,-0.332827], [51.677422,0.131346]]; //bottom-left corner coordinates, top-right corner coordinates
+    var image = L.imageOverlay('images/sample_transparent.png', imageBounds).addTo(map)
 
     var overlays = {
-        "Density": wmsLayer
+        //"Density": wmsLayer
+        "Heat Map": image
     };
 
     ctrl = L.control.layers(baseLayers, overlays).addTo(map); /*After creating WMS, should be: baseLayers,density */
-    getWMS();
+    //getWMS();
 }
 
 /**
  * getWMS and add it to legend every 90 seconds from server
  */
+
+/* 
 function getWMS(){
     ctrl.removeLayer(wmsLayer);
     wmsLayer = L.tileLayer.wms('http://demo.opengeo.org/geoserver/ows?', {layers: 'nasa:bluemarble'});
     ctrl.addOverlay(wmsLayer, 'NASA');
     console.log("WMS Added");
     setTimeout(getWMS, 90000); //every 90 seconds
-}
+} 
+*/
 
 
 /**
