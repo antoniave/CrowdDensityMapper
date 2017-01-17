@@ -40,8 +40,8 @@ function sendContinuously(){
 function showError(error) {  /*Error List IN CASE getLocation has failed */
         switch(error.code) {
         case error.PERMISSION_DENIED:
-            window.location="file:///C:/Users/Laura/Documents/Uni/Master/Advanced%20Geospatial%20Web%20Technologies/CrowdDensityMapper/about.php?error=1"
-            //window.location="https://giv-project13.uni-muenster.de/about.php?error=1";
+            //window.location="file:///C:/Users/Laura/Documents/Uni/Master/Advanced%20Geospatial%20Web%20Technologies/CrowdDensityMapper/about.php?error=1"
+            window.location="https://giv-project13.uni-muenster.de/about.php?error=1";
             //x.innerHTML = "User denied the request for Geolocation.";
             //x.style.backgroundColor="red";
             /**createDefaultmap();*/
