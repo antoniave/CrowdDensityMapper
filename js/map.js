@@ -27,9 +27,9 @@ function sendContinuously(){
     }
 }
 
-function Redirect() {
+/**function Redirect() {
     window.location="about.html";
-}
+}*/
 
 
 /**
@@ -40,22 +40,23 @@ function Redirect() {
 function showError(error) {  /*Error List IN CASE getLocation has failed */
         switch(error.code) {
         case error.PERMISSION_DENIED:
-            Redirect();
-            x.innerHTML = "User denied the request for Geolocation.";
-            x.style.backgroundColor="red";
+            window.location="file:///C:/Users/Laura/Documents/Uni/Master/Advanced%20Geospatial%20Web%20Technologies/CrowdDensityMapper/about.php?error=1"
+            //window.location="https://giv-project13.uni-muenster.de/about.php?error=1";
+            //x.innerHTML = "User denied the request for Geolocation.";
+            //x.style.backgroundColor="red";
             /**createDefaultmap();*/
             break;
         case error.POSITION_UNAVAILABLE:
-            Redirect();
-            x.innerHTML = "Location information is unavailable.";
+            window.location="https://giv-project13.uni-muenster.de/about.php?error=2";
+            //x.innerHTML = "Location information is unavailable.";
             break;
         case error.TIMEOUT:
-            Redirect();
-            x.innerHTML = "The request to get user location timed out.";
+            window.location="https://giv-project13.uni-muenster.de/about.php?error=3";
+            //x.innerHTML = "The request to get user location timed out.";
             break;
         case error.UNKNOWN_ERROR:
-            Redirect();
-            x.innerHTML = "An unknown error occurred.";
+            window.location="https://giv-project13.uni-muenster.de/about.php?error=4";
+            //x.innerHTML = "An unknown error occurred.";
             break;
     }
 }
