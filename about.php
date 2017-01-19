@@ -38,10 +38,6 @@
 		</div>
 	</nav>
 
-	<?php
-	echo "Hallo";
-	?>
-
 	<!-- Content of the Help page-->
 	<div><br><br><br></div>
     <div>
@@ -64,8 +60,7 @@
 					</div>
 					<div>
                     <?php
-						echo "hallo";
-                        if($_GET["error"] === "1") echo "<style='background-color:pink'> User denied the request for Geolocation.";
+                        if($_GET["error"] === "1") echo "<p id="error1"> User denied the request for Geolocation.</p>";
                         if($_GET["error"] === "2") echo "Location information is unavailable.";
                         if($_GET["error"] === "3") echo "The request to get user location timed out.";
                         if($_GET["error"] === "4") echo "An unknown error occurred.";
