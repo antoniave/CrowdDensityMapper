@@ -1,6 +1,7 @@
-
-
+var ctrl = new L.LayerGroup();
 var x = document.getElementById("instruction");
+var HeatLayer;
+var first = true;
 
 /**
  * Receive and send position once
@@ -185,40 +186,62 @@ function createMap(position){
         "Light Map": light
     };
 
-    //Load image from WMS
-    //wmsLayer = L.tileLayer.wms('http://demo.opengeo.org/geoserver/ows?', {layers: 'nasa:bluemarble'}); /*WMS Layer to be received from WPS Team */
 
-    // Load image as layer from URL
-    //var imageUrl = 'http://www.getpaint.net/doc/latest/images/layerswindow/appletransparentbg.png';
-    //var image = L.imageOverlay(imageUrl, imageBounds).addTo(map);
-    
-    // Load image as layer LOCALLY
-    var imageBounds = [[51.404102,-0.332827], [51.677422,0.131346]]; //bottom-left corner coordinates, top-right corner coordinates
-    var image = L.imageOverlay('images/sample_transparent.png', imageBounds).addTo(map)
+URL = "https://giv-project13.uni-muenster.de:8443/api/1.0/currentPicture";
 
-    var overlays = {
-        //"Density": wmsLayer
-        "Heat Map": image
+getCurrentImage();
+
+function getCurrentImage() {
+$.ajax({
+       url: URL,
+      success: function(data) {
+        //console.log(data);
+        //createPNG(data);
+        if (first==true) {
+            createPNG(data);
+        } else {
+            refreshPNG(data);
+        }
+      },
+      error: function() {
+        alert ("Error retrieving heat map: "+error);
+        console.log(error);
+      }
+   }); setTimeout(getCurrentImage,10000)
+}
+
+function createPNG(picData) {
+    var path = picData.path;
+    var bbox = JSON.parse(picData.bbox);
+    var imageBounds = [[bbox[0]], [bbox[1]]];
+    var image = L.imageOverlay(path, imageBounds).addTo(map);
+    createLegend(image);
+    //ctrl.addOverlay(L.imageOverlay(path, imageBounds), "Heat");
+}
+
+
+
+function createLegend(layer) {
+    first = false;
+    HeatLayer = layer;
+    overlays = {
+        "Heat Map": HeatLayer
     };
-
-    ctrl = L.control.layers(baseLayers, overlays).addTo(map); /*After creating WMS, should be: baseLayers,density */
+    ctrl = L.control.layers(baseLayers, overlays).addTo(map);
     //getWMS();
 }
 
-/**
- * getWMS and add it to legend every 90 seconds from server
- */
+function refreshPNG(picData) {
+    ctrl.removeLayer(HeatLayer);
+    var path = picData.path;
+    var bbox = JSON.parse(picData.bbox);
+    var imageBounds = [[bbox[0]], [bbox[1]]];
+    HeatLayer = L.imageOverlay(path, imageBounds).addTo(map);
+    ctrl.addOverlay(HeatLayer, "Heat Map");
+    console.log("PNG Refreshed");
 
-/* 
-function getWMS(){
-    ctrl.removeLayer(wmsLayer);
-    wmsLayer = L.tileLayer.wms('http://demo.opengeo.org/geoserver/ows?', {layers: 'nasa:bluemarble'});
-    ctrl.addOverlay(wmsLayer, 'NASA');
-    console.log("WMS Added");
-    setTimeout(getWMS, 90000); //every 90 seconds
-} 
-*/
-
+}
+} //end of createMap function
 
 /**
  * Send geojsonFeature to server
