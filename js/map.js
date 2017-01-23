@@ -1,7 +1,9 @@
+/*Global Variables */
 var ctrl = new L.LayerGroup();
 var x = document.getElementById("instruction");
 var HeatLayer;
 var first = true;
+var legend = L.control({position: 'bottomleft'});
 
 /**
  * Receive and send position once
@@ -215,6 +217,8 @@ function createPNG(picData) {
     var bbox = JSON.parse(picData.bbox);
     var imageBounds = [[bbox[0]], [bbox[1]]];
     var image = L.imageOverlay(path, imageBounds).addTo(map);
+    var timedate = picData.time;
+    addTimestamp(timedate); 
     createLegend(image);
     //ctrl.addOverlay(L.imageOverlay(path, imageBounds), "Heat");
 }
@@ -236,11 +240,28 @@ function refreshPNG(picData) {
     var path = picData.path;
     var bbox = JSON.parse(picData.bbox);
     var imageBounds = [[bbox[0]], [bbox[1]]];
+    var timedate = picData.time;
     HeatLayer = L.imageOverlay(path, imageBounds).addTo(map);
     ctrl.addOverlay(HeatLayer, "Heat Map");
+    addTimestamp(timedate);
+
     console.log("PNG Refreshed");
 
+
 }
+
+function addTimestamp(timedate) {
+    var date = timedate.substr(0,10);
+    var time = timedate.substr(11,8);
+    legend.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'info legend');
+    div.innerHTML = time+"  "+date+'<br>';
+    return div;
+    };
+legend.addTo(map);
+}
+
+
 } //end of createMap function
 
 /**
