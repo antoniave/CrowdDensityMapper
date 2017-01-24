@@ -1,7 +1,7 @@
 /*Global Variables */
+var map, baseLayers, HeatLayer;
 var ctrl = new L.LayerGroup();
 var x = document.getElementById("instruction");
-var HeatLayer;
 var first = true;
 var legend = L.control({position: 'bottomleft'});
 
@@ -56,48 +56,6 @@ function showError(error) {  /*Error List IN CASE getLocation has failed */
             break;
     }
 }
-
-/**
- * positioning is denied by the user
- * default map is created
- */
-function createDefaultmap(){
-	var mbAttr = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-					'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-					'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-		mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibmdhdmlzaCIsImEiOiJjaXFheHJmc2YwMDdoaHNrcWM4Yjhsa2twIn0.8i1Xxwd1XifUU98dGE9nsQ';
-
-	var grayscale   = L.tileLayer(mbUrl, {id: 'mapbox.light', attribution: mbAttr}),
-		streets  = L.tileLayer(mbUrl, {id: 'mapbox.streets',   attribution: mbAttr}),
-		outdoors = L.tileLayer(mbUrl, {id: 'mapbox.outdoors', attribution: mbAttr}),
-		satellite = L.tileLayer(mbUrl, {id: 'mapbox.satellite', attribution: mbAttr}),
-		dark = L.tileLayer(mbUrl, {id: 'mapbox.dark', attribution: mbAttr}),
-		light = L.tileLayer(mbUrl, {id: 'mapbox.light', attribution: mbAttr}),
-		satellitestreets = L.tileLayer(mbUrl, {id: 'mapbox.streets-satellite', attribution: mbAttr});
-
-	var map = L.map('mapid', {
-		center: [51.962038,7.625937], /*Munster DOM as default location */
-		zoom: 15,
-		layers: [satellite] // Default basemaplayer on startrup, can also give density map here to show by default)
-	});
-
-	var baseLayers = {
-		"Grayscale": grayscale,
-		"Streets": streets,
-		"Outdoors": outdoors,
-		"Satellite": satellite,
-		"Satellite Streets": satellitestreets,
-		"Dark Map": dark,
-		"Light Map": light
-	};
-	/*
-	var overlays = {
-		"Density": density
-	};*/
-
-	L.control.layers(baseLayers).addTo(map); /*After creating WMS, should be: baseLayers,density */
-}
-
 
 /**
  * position is approved and page completely reloaded
@@ -165,13 +123,13 @@ function createMap(position){
         light = L.tileLayer(mbUrl, {id: 'mapbox.light', attribution: mbAttr}),
         satellitestreets = L.tileLayer(mbUrl, {id: 'mapbox.streets-satellite', attribution: mbAttr})
         ;
-    var map = L.map('mapid', {
+    map = L.map('mapid', {
         center: [position.coords.latitude, position.coords.longitude],
         zoom: 17,
         layers: [satellite] // Default basemaplayer on startrup, can also give density map here to show by default)
     });
 
-    var baseLayers = {
+    baseLayers = {
         "Grayscale": grayscale,
         "Streets": streets,
         "Outdoors": outdoors,
@@ -186,6 +144,13 @@ URL = "https://giv-project13.uni-muenster.de:8443/api/1.0/currentPicture";
 
 getCurrentImage();
 
+
+} //end of createMap function
+
+
+/*
+* Requests image metadata from server
+*/
 function getCurrentImage() {
 $.ajax({
        url: URL,
@@ -205,6 +170,9 @@ $.ajax({
    }); setTimeout(getCurrentImage,10000)
 }
 
+/*
+* Creates PNG based on image URL and bounding box
+*/
 function createPNG(picData) {
     var path = picData.path;
     var bbox = JSON.parse(picData.bbox);
@@ -216,8 +184,9 @@ function createPNG(picData) {
     //ctrl.addOverlay(L.imageOverlay(path, imageBounds), "Heat");
 }
 
-
-
+/*
+* Creates Legend for map (first time) and adds the heat layer (image)
+*/
 function createLegend(layer) {
     first = false;
     HeatLayer = layer;
@@ -227,7 +196,9 @@ function createLegend(layer) {
     ctrl = L.control.layers(baseLayers, overlays).addTo(map);
     //getWMS();
 }
-
+/*
+*  Refreshes PNG displayed on map
+*/
 function refreshPNG(picData) {
     ctrl.removeLayer(HeatLayer);
     var path = picData.path;
@@ -243,19 +214,21 @@ function refreshPNG(picData) {
 
 }
 
+/*
+* Add time stamp to map based on image metadata
+*/
 function addTimestamp(timedate) {
-    var date = timedate.substr(0,10);
-    var time = timedate.substr(11,8);
+    //var date = timedate.substr(0,10);
+    //var time = timedate.substr(11,8);
+    date = new Date(timedate);
     legend.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'info legend');
-    div.innerHTML = time+"  "+date+'<br>';
+    div.innerHTML = date.toLocaleString()+'<br>';
     return div;
     };
 legend.addTo(map);
 }
 
-
-} //end of createMap function
 
 /**
  * Send geojsonFeature to server
