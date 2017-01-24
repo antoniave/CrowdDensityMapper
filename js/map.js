@@ -249,24 +249,48 @@ function sendPositionToServer(geojsonFeature){
     });
 }
 
-//===== timelider ======
-// show one image for every 10 min in the last two hour
+
+
+//========= timeslider ==========
+// todo: when to call the function to fill timeslider?
+// todo: enable/disable timeslider - do not automatically reload the wms while timeslider is used
 
 $(document).ready(function() {
-    // todo: get request to db to receive the link for the requested timestep (or all at once?)
-        // We'll receive a json containing a timestemp and a link to an image (png), sorted
+    // request to db to receive infos for all images uploaded in the last two hours
+    $.ajax({
+        // todo reset to 120 min
+        url: 'https://giv-project13.uni-muenster.de:8443/api/1.0/timeslider/17200',
+        /*Success*/
+        success: function(data){
+            console.log(data);
+            initializeTimeslider(data);
+        },
+        /*error*/
+        error: function (error) {
+            console.log("error"+ error);
+            alert(error.responseText);
+        }
+    });
+});
 
-    // todo read out timestamp and convert it to unix seconds and add the correct value as max in the slider
-    //for testing: take the current time as max
-    var secs = new Date().getTime() + 3600*2;
-    var max = secs; // time of the latest
-    var min = ((secs/1000 - 60*60*2))*1000; //2 hours in the past
+
+// show one image for every 10 min in the last two hour
+function initializeTimeslider(data){
+
+    // define newest and oldest date to show on the timeslider
+    var firstObject = data[0];
+    var max = Date.parse(firstObject.time);
+    max = max/1000 + 3600*2;
+    var min = ((max - 60*60*2))*1000; //2 hours in the past
 
     // Show latest date as text next to timeslider
     var latestDate = new Date (1970, 0, 1);
-    latestDate.setSeconds(max/1000);
+    latestDate.setSeconds(max);
     $("#dateField").text(latestDate.toISOString().split('T')[0] + " " + latestDate.toISOString().split('T')[1].split('.')[0]);
 
+    // todo: generate an array containing just one image for each 10 min (or do it direcly in the change function?)
+
+    // initialize timeslider
     $("#slider").slider({
         min: min,
         max: max,
@@ -280,16 +304,8 @@ $(document).ready(function() {
             date.setSeconds(seconds/1000);
             $("#dateField").text(date.toISOString().split('T')[0] + " " + date.toISOString().split('T')[1].split('.')[0]);
 
-            // todo show the image (belonging to the link) on the map (and remove the old one)
-            // todo: do not automatically reload the wms while timeslider is used: maybe enable timeslider manually?
+            // todo show the image (belonging to the link: ignore the second number of the minutes for mapping) on the map (and remove the old one)
         }
     });
-});
-
-
-//========= timestamp =========
-// todo show timestamp with the date and time of the last reload of the wms request
-
-
-
+}
 
