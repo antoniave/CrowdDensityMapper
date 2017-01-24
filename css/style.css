@@ -76,7 +76,7 @@ body,html {
 .panel-default > .panel-body {
     background-color: #e5e5e5; 
 }
-#error1 {
+#error {
     background-color: red;
 }
 

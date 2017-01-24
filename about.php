@@ -60,10 +60,10 @@
 					</div>
 					<div>
                     <?php
-                        if($_GET["error"] === "1") echo "<p id=\"error1\"> User denied the request for Geolocation.</p>";
-                        if($_GET["error"] === "2") echo "Location information is unavailable.";
-                        if($_GET["error"] === "3") echo "The request to get user location timed out.";
-                        if($_GET["error"] === "4") echo "An unknown error occurred.";
+                        if($_GET["error"] === "1") echo "<p id=\"error\"> User denied the request for Geolocation.</p>";
+                        if($_GET["error"] === "2") echo "<p id=\"error\"> Location information is unavailable.</p>";
+                        if($_GET["error"] === "3") echo "<p id=\"error\"> The request to get user location timed out.</p>";
+                        if($_GET["error"] === "4") echo "<p id=\"error\"> An unknown error occurred.</p>";
                     ?>
                     </div>
 				</div>

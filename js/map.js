@@ -43,23 +43,16 @@ function sendContinuously(){
 function showError(error) {  /*Error List IN CASE getLocation has failed */
         switch(error.code) {
         case error.PERMISSION_DENIED:
-            window.location="file:///C:/Users/Laura/Documents/Uni/Master/Advanced%20Geospatial%20Web%20Technologies/CrowdDensityMapper/about.php?error=1"
-            //window.location="https://giv-project13.uni-muenster.de/about.php?error=1";
-            //x.innerHTML = "User denied the request for Geolocation.";
-            //x.style.backgroundColor="red";
-            /**createDefaultmap();*/
+            window.location="https://giv-project13.uni-muenster.de/about.php?error=1";
             break;
         case error.POSITION_UNAVAILABLE:
             window.location="https://giv-project13.uni-muenster.de/about.php?error=2";
-            //x.innerHTML = "Location information is unavailable.";
             break;
         case error.TIMEOUT:
             window.location="https://giv-project13.uni-muenster.de/about.php?error=3";
-            //x.innerHTML = "The request to get user location timed out.";
             break;
         case error.UNKNOWN_ERROR:
             window.location="https://giv-project13.uni-muenster.de/about.php?error=4";
-            //x.innerHTML = "An unknown error occurred.";
             break;
     }
 }
