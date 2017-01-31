@@ -163,7 +163,7 @@ $.ajax({
             refreshPNG(data);
         }
       },
-      error: function() {
+      error: function(error, response, body) {
         alert ("Error retrieving heat map: "+error);
         console.log(error);
       }
@@ -174,9 +174,9 @@ $.ajax({
 * Creates PNG based on image URL and bounding box
 */
 function createPNG(picData) {
-    var path = picData.path;
+    var path = "/images/"+picData.path;
     var bbox = JSON.parse(picData.bbox);
-    var imageBounds = [[bbox[0]], [bbox[1]]];
+    var imageBounds = [[bbox[0]], [bbox[1]]]; //If switched in DB: [[bbox[1][0],bbox[0][0]],[bbox[1][1],bbox[0][1]]]
     var image = L.imageOverlay(path, imageBounds).addTo(map);
     var timedate = picData.time;
     addTimestamp(timedate); 
@@ -200,10 +200,11 @@ function createLegend(layer) {
 *  Refreshes PNG displayed on map
 */
 function refreshPNG(picData) {
+    map.removeLayer(HeatLayer);
     ctrl.removeLayer(HeatLayer);
-    var path = picData.path;
+    var path = "/images/"+picData.path;
     var bbox = JSON.parse(picData.bbox);
-    var imageBounds = [[bbox[0]], [bbox[1]]];
+    var imageBounds = [[bbox[0]], [bbox[1]]];;
     var timedate = picData.time;
     HeatLayer = L.imageOverlay(path, imageBounds).addTo(map);
     ctrl.addOverlay(HeatLayer, "Heat Map");
