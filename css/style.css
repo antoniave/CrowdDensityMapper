@@ -6,10 +6,12 @@ body,html {
 }
 
 .legend {
-  font-family: sans-serif;
-  font-size: 18px;
-  color: #000031;
-  background-color: #9ea0b1;
+    font-family: sans-serif;
+    font-size: 18px;
+    color: #000031;
+    background-color: #9ea0b1;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 
 /* Navbar settings */

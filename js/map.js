@@ -5,6 +5,7 @@ var x = document.getElementById("instruction");
 var first = true;
 var legend = L.control({position: 'bottomleft'});
 var URL;
+var timesliderDisabled = true;
 
 /**
  * Receive and send position once
@@ -36,7 +37,7 @@ function sendContinuously(){
 
 
 /**
- * Called if an error occurs by recieving users location
+ * Called if an error occurs by receiving users location
  * (getLocation(), sendContinuously())
  * @param error
  */
@@ -147,22 +148,25 @@ function createMap(position){
 * Requests image metadata from server
 */
 function getCurrentImage() {
-$.ajax({
-       url: URL,
-      success: function(data) {
-        //console.log(data);
-        //createPNG(data);
-        if (first==true) {
-            createPNG(data);
-        } else {
-            refreshPNG(data);
-        }
-      },
-      error: function(error, response, body) {
-        alert ("Error retrieving heat map: "+error);
-        console.log(error);
-      }
-   }); setTimeout(getCurrentImage, 120000)
+    $.ajax({
+           url: URL,
+          success: function(data) {
+            //console.log(data);
+            //createPNG(data);
+            if (first==true) {
+                createPNG(data);
+            } else {
+                refreshPNG(data);
+            }
+          },
+          error: function(error, response, body) {
+            alert ("Error retrieving heat map: "+error);
+            console.log(error);
+          }
+       });
+
+    if(timesliderDisabled)
+        setTimeout(getCurrentImage, 1200)
 }
 
 /*
@@ -218,11 +222,11 @@ function addTimestamp(timedate) {
     //var time = timedate.substr(11,8);
     date = new Date(timedate);
     legend.onAdd = function (map) {
-    var div = L.DomUtil.create('div', 'info legend');
-    div.innerHTML = date.toLocaleString()+'<br>';
-    return div;
+        var div = L.DomUtil.create('div', 'info legend');
+        div.innerHTML = date.toLocaleString()+'<br>';
+        return div;
     };
-legend.addTo(map);
+    legend.addTo(map);
 }
 
 
@@ -247,10 +251,14 @@ function sendPositionToServer(geojsonFeature){
 
 
 //========= timeslider ==========
-// todo: when to call the function to fill timeslider?
-// todo: enable/disable timeslider - do not automatically reload the wms while timeslider is used
 
+// request data for timeslider
 $(document).ready(function() {
+   getTimesliderData();
+});
+
+
+function getTimesliderData(){
     // request to db to receive infos for all images uploaded in the last two hours
     $.ajax({
         // todo reset to 120 min
@@ -266,7 +274,7 @@ $(document).ready(function() {
             alert(error.responseText);
         }
     });
-});
+}
 
 
 // show one image for every 10 min in the last two hour
@@ -285,7 +293,7 @@ function initializeTimeslider(data){
     // fill the images array
     // go through all images in data array
     while (run){
-        // search for the last inserted image, take the timestemp and substract seconds for 10 min
+        // search for the last inserted image, take the timestamp and substract seconds for 10 min
         var help = imagesArray[imagesArray.length-1];
         help = Date.parse(help.time);
         help = help - 600000;
@@ -298,7 +306,6 @@ function initializeTimeslider(data){
                 newTime = data[length].time;
             } else {
                 run = false;
-                console.log(run);
             }
         }
 
@@ -307,10 +314,9 @@ function initializeTimeslider(data){
         imagesArray.push(data[length]);
     }
 
-    // show as many timestemps on the slider as images inserted in the array
+    // show as many timestamps on the slider as images inserted in the array
     var min = 0;
     var max = imagesArray.length-1;
-    console.log(max);
 
     // initialize timeslider
     $("#slider").slider({
@@ -318,7 +324,7 @@ function initializeTimeslider(data){
         max: max,
         step: 1,
         value: max,         // position of the handler at the beginning
-        disabled: false,
+        disabled: timesliderDisabled,
 
         change: function( event, ui ) {
             // show the image on the map
@@ -327,5 +333,20 @@ function initializeTimeslider(data){
             refreshPNG(image);
         }
     });
+}
+
+function enableTimeslider(){
+    if(timesliderDisabled){
+        // timeslider enabled
+        timesliderDisabled = false;
+        $( "#slider" ).slider( "enable" );
+        getTimesliderData();
+    } else {
+        // timeslider disabled
+        timesliderDisabled = true;
+        $( "#slider" ).slider( "disable" );
+        // start automatic reload of the map again
+        getCurrentImage();
+    }
 }
 
