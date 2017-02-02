@@ -166,7 +166,7 @@ function getCurrentImage() {
        });
 
     if(timesliderDisabled)
-        setTimeout(getCurrentImage, 1200)
+        setTimeout(getCurrentImage, 120000)
 }
 
 /*
