@@ -44,21 +44,29 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xs-12 col-md-6 col-md-offset-3">
+					<!-- pannel for information-->
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h3 class="panel-title"><strong>How to use the Crowd Density Mapper Application</strong></h3>
 					    </div>
 						<div class="panel-body">
 							<strong>The Application</strong> <br><br>
-							This Application displays the density of a croud right around the users location. <br>
-							For this reason the user is requested to activate the GPS device in his smartphone and allow
-							the browser to use his actual location. <br>
-							If the user does not allow the Application the use of the location he can't use it. <br><br><br>
+							The application displays the crowd density around the user's current location. 
+							Your location will be annonymously sent to a sever and processed. 
+							Along with processing other users' location, a heat map will be displayed highlighting 
+							the areas with higher user density. <br>
+							<br><br><br>
 							<strong> Usage </strong> <br><br>
-							To update the displayed data simply press the "Refresh" button.  
+							To activate the map, you are requested to allow your location in the browser. 
+							If using a mobile device, please also enable the GPS sensor as well to contribute a more precise location.  
+							Once you enable your location, a map with all map functionalities alongside the heat layer will be displayed 
+							and refreshed automatically every 2 minutes.<br>
+							<b>Note:</b>  If you deny your location via the browser you cannot use the application.
+							  
 						</div>
 					</div>
 					<div>
+					<!-- error handling -->
                     <?php
                         if($_GET["error"] === "1") echo "<p id=\"error\"> User denied the request for Geolocation.<br> If you want to go back to the Application, please set the location settings in the Website settings to \"Accept\" manually.</p>";
                         if($_GET["error"] === "2") echo "<p id=\"error\"> Location information is unavailable.</p>";
