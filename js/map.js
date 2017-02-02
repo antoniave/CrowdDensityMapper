@@ -4,6 +4,7 @@ var ctrl = new L.LayerGroup();
 var x = document.getElementById("instruction");
 var first = true;
 var legend = L.control({position: 'bottomleft'});
+var URL;
 
 /**
  * Receive and send position once
@@ -23,7 +24,6 @@ function getLocation() { /*GetLocation HTML5 */
 function sendContinuously(){
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(sendPositionAuto, showError);
-        // todo: prevent asking for permissions each time
         setTimeout(sendContinuously, 60000);
     } else {
         x.innerHTML = "Geolocation is not supported by this browser or device";
@@ -51,7 +51,7 @@ function showError(error) {  /*Error List IN CASE getLocation has failed */
         case error.TIMEOUT:
             window.location="https://giv-project13.uni-muenster.de/about.php?error=3";
             break;
-        case error.UNKNOWN_ERROR:
+        default:
             window.location="https://giv-project13.uni-muenster.de/about.php?error=4";
             break;
     }
@@ -67,7 +67,6 @@ function initialize(position) {
     var geojsonFeature = createGeoJSON(position);
 
 	console.log(JSON.stringify(geojsonFeature)); /*TEST - Print JSON as string */
-	// todo call sendPositionToServerr before createMap
 	createMap(position);
 	sendPositionToServer(geojsonFeature);
 
@@ -139,12 +138,8 @@ function createMap(position){
         "Light Map": light
     };
 
-
-URL = "https://giv-project13.uni-muenster.de:8443/api/1.0/currentPicture";
-
-getCurrentImage();
-
-
+    URL = "https://giv-project13.uni-muenster.de:8443/api/1.0/currentPicture";
+    getCurrentImage();
 } //end of createMap function
 
 
@@ -167,7 +162,7 @@ $.ajax({
         alert ("Error retrieving heat map: "+error);
         console.log(error);
       }
-   }); setTimeout(getCurrentImage,10000)
+   }); setTimeout(getCurrentImage, 120000)
 }
 
 /*
@@ -204,7 +199,7 @@ function refreshPNG(picData) {
     ctrl.removeLayer(HeatLayer);
     var path = "/images/"+picData.path;
     var bbox = JSON.parse(picData.bbox);
-    var imageBounds = [[bbox[0]], [bbox[1]]];;
+    var imageBounds = [[bbox[0]], [bbox[1]]];
     var timedate = picData.time;
     HeatLayer = L.imageOverlay(path, imageBounds).addTo(map);
     ctrl.addOverlay(HeatLayer, "Heat Map");
@@ -240,7 +235,6 @@ function sendPositionToServer(geojsonFeature){
         type: "POST",
         url: "https://giv-project13.uni-muenster.de:8443/api/1.0/GPS",
         data: geojsonFeature,
-        // todo
         success: function (data, textStatus){
             //alert ("Your location has been submitted to server!" + textStatus);
         },
@@ -278,34 +272,59 @@ $(document).ready(function() {
 // show one image for every 10 min in the last two hour
 function initializeTimeslider(data){
 
-    // define newest and oldest date to show on the timeslider
-    var firstObject = data[0];
-    var max = Date.parse(firstObject.time);
-    max = max/1000 + 3600*2;
-    var min = ((max - 60*60*2))*1000; //2 hours in the past
+    // objects of the images to show in the timeslider
+    var imagesArray = [];
+    // add the newest image in the array
+    imagesArray.push(data[0]);
 
-    // Show latest date as text next to timeslider
-    var latestDate = new Date (1970, 0, 1);
-    latestDate.setSeconds(max);
-    $("#dateField").text(latestDate.toISOString().split('T')[0] + " " + latestDate.toISOString().split('T')[1].split('.')[0]);
+    // help variables
+    var length = 0;
+    var index = 1;
+    var run = true;
 
-    // todo: generate an array containing just one image for each 10 min (or do it direcly in the change function?)
+    // fill the images array
+    // go through all images in data array
+    while (run){
+        // search for the last inserted image, take the timestemp and substract seconds for 10 min
+        var help = imagesArray[imagesArray.length-1];
+        help = Date.parse(help.time);
+        help = help - 600000;
+        var newTime = data[length].time;
+
+        // go through the images and search for the first one that is 10 min older than the last inserted one
+        while (help <= Date.parse(newTime) && run){
+            length++;
+            if(length<data.length){
+                newTime = data[length].time;
+            } else {
+                run = false;
+                console.log(run);
+            }
+        }
+
+        // insert the image into the array
+        if(run)
+        imagesArray.push(data[length]);
+    }
+
+    // show as many timestemps on the slider as images inserted in the array
+    var min = 0;
+    var max = imagesArray.length-1;
+    console.log(max);
 
     // initialize timeslider
     $("#slider").slider({
         min: min,
         max: max,
-        step: 600*1000,     // 10 min steps
+        step: 1,
         value: max,         // position of the handler at the beginning
         disabled: false,
 
         change: function( event, ui ) {
-            var seconds = ui.value+"";
-            var date = new Date(1970, 0, 1);
-            date.setSeconds(seconds/1000);
-            $("#dateField").text(date.toISOString().split('T')[0] + " " + date.toISOString().split('T')[1].split('.')[0]);
-
-            // todo show the image (belonging to the link: ignore the second number of the minutes for mapping) on the map (and remove the old one)
+            // show the image on the map
+            var index = ui.value+"";
+            var image = imagesArray[max-index];
+            refreshPNG(image);
         }
     });
 }
